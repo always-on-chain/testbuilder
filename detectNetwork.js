@@ -26,6 +26,8 @@ var detectNetwork = function(cardNumber) {
   	return 'Discover'
   } else if (isMaestro(cardNumber)) {
   	return 'Maestro'
+  } else if (isChinaUnionPay(cardNumber)) {
+  	return 'China UnionPay'
   }
 
   function isDinersClub(cardNumber) {
@@ -62,6 +64,14 @@ var detectNetwork = function(cardNumber) {
   	var prefix = Number(cardNumber.slice(0, 4)) === 5018 || Number(cardNumber.slice(0, 4)) === 5020 ||
   	             Number(cardNumber.slice(0, 4)) === 5038 || Number(cardNumber.slice(0, 4)) === 6304;
   	var length = cardNumber.length >= 12 && cardNumber.length <= 19;
+  	return prefix && length;
+  }
+  //China UnionPay always has a prefix of 622126-622925, 624-626, or 6282-6288 and a length of 16-19.
+  function isChinaUnionPay(cardNumber) {
+  	var prefix = (Number(cardNumber.slice(0, 6)) >= 622126 && Number(cardNumber.slice(0, 6)) <= 622925) ||
+  				 (Number(cardNumber.slice(0, 3)) >= 624 && Number(cardNumber.slice(0, 3)) <= 626) || 
+  				 (Number(cardNumber.slice(0, 4)) >= 6282 && Number(cardNumber.slice(0, 4)) <= 6288);
+  	var length = cardNumber.length >= 16 && cardNumber.length <= 19;
   	return prefix && length;
   }
 };

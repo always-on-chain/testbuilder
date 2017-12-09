@@ -17,17 +17,19 @@ var detectNetwork = function(cardNumber) {
   if (isDinersClub(cardNumber)) {
   	return 'Diner\'s Club';
   } else if (isAmericanExpress(cardNumber)) {
-  	return 'American Express'
+  	return 'American Express';
   } else if (isVisa(cardNumber)) {
   	return 'Visa';
   } else if (isMasterCard(cardNumber)) {
-  	return 'MasterCard'
+  	return 'MasterCard';
   } else if (isDiscover(cardNumber)) {
-  	return 'Discover'
+  	return 'Discover';
   } else if (isMaestro(cardNumber)) {
-  	return 'Maestro'
+  	return 'Maestro';
   } else if (isChinaUnionPay(cardNumber)) {
-  	return 'China UnionPay'
+  	return 'China UnionPay';
+  } else if (isSwitch(cardNumber)) {
+  	return 'Switch';
   }
 
   function isDinersClub(cardNumber) {
@@ -44,7 +46,7 @@ var detectNetwork = function(cardNumber) {
   function isVisa(cardNumber) {
   	var prefix = Number(cardNumber.slice(0, 1)) === 4;
   	var length = cardNumber.length === 13 || cardNumber.length === 16 || cardNumber.length === 19;
-  	return  prefix && length; 
+  	return  prefix && length && !isSwitch(cardNumber); 
   }
   //MasterCard always has a prefix of 51, 52, 53, 54, or 55 and a length of 16.
   function isMasterCard(cardNumber) {
@@ -72,6 +74,15 @@ var detectNetwork = function(cardNumber) {
   				 (Number(cardNumber.slice(0, 3)) >= 624 && Number(cardNumber.slice(0, 3)) <= 626) || 
   				 (Number(cardNumber.slice(0, 4)) >= 6282 && Number(cardNumber.slice(0, 4)) <= 6288);
   	var length = cardNumber.length >= 16 && cardNumber.length <= 19;
+  	return prefix && length;
+  }
+  //Switch always has a prefix of 4903, 4905, 4911, 4936, 564182, 633110, 6333, or 6759 and a length of 16, 18, or 19.
+  function isSwitch(cardNumber) {
+  	var prefixes = [4903, 4905, 4911, 4936, 564182, 633110, 6333, 6759];
+  	var prefix = prefixes.some(function(element) {
+  		return cardNumber.slice(0, element.toString().length) === element.toString();
+  	})
+  	var length = cardNumber.length === 16 || cardNumber.length === 18 || cardNumber.length === 19;
   	return prefix && length;
   }
 };

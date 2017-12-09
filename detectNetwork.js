@@ -7,12 +7,45 @@
 //   1. The first few numbers (called the prefix)
 //   2. The number of digits in the number (called the length)
 
+
 var detectNetwork = function(cardNumber) {
   // Note: `cardNumber` will always be a string
   // The Diner's Club network always starts with a 38 or 39 and is 14 digits long
   // The American Express network always starts with a 34 or 37 and is 15 digits long
 
-  // Once you've read this, go ahead and try to implement this function, then return to the console.
+  // Once you've read this, go ahead and try to implement this function, then return to the console
+  if (isDinersClub(cardNumber)) {
+  	return 'Diner\'s Club';
+  } else if (isAmericanExpress(cardNumber)) {
+  	return 'American Express'
+  } else if (isVisa(cardNumber)) {
+  	return 'Visa';
+  } else if (isMasterCard(cardNumber)) {
+  	return 'MasterCard'
+  }
+
+  function isDinersClub(cardNumber) {
+  	var prefix = Number(cardNumber.slice(0, 2)) === 38 || Number(cardNumber.slice(0, 2)) === 39;
+  	var length = cardNumber.length === 14;
+  	return prefix && length;
+  }
+  function isAmericanExpress(cardNumber) {
+  	var prefix = Number(cardNumber.slice(0, 2)) === 34 || Number(cardNumber.slice(0, 2)) === 37;
+  	var length = cardNumber.length === 15;
+  	return  prefix && length;		
+  }
+  //Visa always has a prefix of 4 and a length of 13, 16, or 19.
+  function isVisa(cardNumber) {
+  	var prefix = Number(cardNumber.slice(0, 1)) === 4;
+  	var length = cardNumber.length === 13 || cardNumber.length === 16 || cardNumber.length === 19;
+  	return  prefix && length; 
+  }
+  //MasterCard always has a prefix of 51, 52, 53, 54, or 55 and a length of 16.
+  function isMasterCard(cardNumber) {
+  	var prefix = Number(cardNumber.slice(0, 2)) >= 51 && Number(cardNumber.slice(0, 2)) <= 55;
+  	var length = cardNumber.length === 16;
+  	return prefix && length;
+  }
 };
 
 

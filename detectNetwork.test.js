@@ -222,7 +222,36 @@ describe('should support China UnionPay', function() {
   loopPrefixAndLengths(6282, 6288, 4);
 });
 
-describe('should support Switch')
+//Heads up! Switch and Visa seem to have some overlapping card numbers - in any apparent conflict, you should choose the network with the longer prefix.
+//Switch always has a prefix of 4903, 4905, 4911, 4936, 564182, 633110, 6333, or 6759 and a length of 16, 18, or 19.
+describe('should support Switch', function() {
+  var prefixes = [4903, 4905, 4911, 4936, 564182, 633110, 6333, 6759];
+  var lengths = [16, 18, 19];
+
+  function getLength(length, digits) {
+    var total = '';
+    for (var i = 0; i < length - digits; i++) {
+      total += '1';
+    }
+    return total;
+  }
+
+  function loopPrefixAndLengths(start, end) {
+    for (var prefix = start; prefix <= end; prefix++) {
+      for (var i = 0; i < lengths.length; i++) {
+        (function(prefix, lengths) {
+          var prefixLength = prefix.toString().length;
+          it('has a prefix of ' + prefix + ' and a length of ' + lengths, function() {
+            detectNetwork(prefix.toString() + getLength(lengths, prefixLength)).should.equal('Switch');
+          })
+        })(prefixes[prefix], lengths[i])
+      }
+    }
+  }
+
+  loopPrefixAndLengths(0, prefixes.length - 1);
+});
+
 
 
 
